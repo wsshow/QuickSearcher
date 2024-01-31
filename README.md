@@ -1,7 +1,7 @@
-# BookmarksManager
+# QuickSearcher
 
 ## 描述
-浏览器书签管理插件
+高效的浏览器内容检索插件
 
 ## 快捷键
 - `/` 打开检索界面并聚焦搜索框
