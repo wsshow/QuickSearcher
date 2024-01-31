@@ -20,3 +20,4 @@
 
 ## 界面
 ![QSearcher](./img/QSearcher.png)
+![QSearcher-New](./img/QSearcher-New.png)
