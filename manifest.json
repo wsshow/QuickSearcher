@@ -1,0 +1,47 @@
+{
+    "name": "QuickSearcher",
+    "version": "0.0.1",
+    "author": "wsshow",
+    "description": "高效的浏览器内容检索插件",
+    "manifest_version": 3,
+    "background": {
+        "service_worker": "bg-wrapper.js"
+    },
+    "icons": {
+        "128": "./img/QS.png"
+    },
+    "permissions": [
+        "bookmarks",
+        "tabs"
+    ],
+    "action": {
+        "default_popup": "popup.html",
+        "default_title": "高效内容检索器"
+    },
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "img/*.png"
+            ],
+            "matches": [
+                "<all_urls>"
+            ]
+        }
+    ],
+    "content_scripts": [
+        {
+            "matches": [
+                "*://*.baidu.com/*",
+                "*://*.bing.com/*",
+                "*://*.google.com/*"
+            ],
+            "js": [
+                "content.js"
+            ],
+            "css": [
+                "content.css"
+            ],
+            "run_at": "document_end"
+        }
+    ]
+}
