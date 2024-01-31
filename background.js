@@ -37,6 +37,25 @@ function searchBookmarks(query, sendResponse) {
     })
 }
 
+function getHistory(query, sendResponse) {
+    chrome.history.search({ text: query.text, startTime: query.startTime, maxResults: query.maxResults }, (historyItems) => {
+        historyItems = historyItems.filter((item, index, self) => {
+            return index === self.findIndex((t) => {
+                return item.title === t.title
+            })
+        })
+        const res = historyItems.map((item) => {
+            return {
+                url: item.url,
+                title: item.title,
+                time: item.lastVisitTime,
+                tag: { id: 'lsjl', name: '历史记录' }
+            }
+        })
+        sendResponse(res)
+    })
+}
+
 function scanBookmarks(nodes, bookmarks) {
     for (const node of nodes) {
         if (node.url) {
@@ -68,6 +87,9 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
             return true
         case 'getTabs':
             getTabs(sendResponse)
+            return true
+        case 'getHistory':
+            getHistory(req.query, sendResponse)
             return true
         case 'fuseSearch':
             fuseSearch(req.arr, req.query, sendResponse)

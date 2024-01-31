@@ -1,4 +1,6 @@
-document.body.innerHTML += `
+const objCore = document.createElement('div')
+
+const coreContent = `
 <div class="ws-qsearch-s-main">
       <div class="ws-qsearch-s-title">QSearcher</div>
       <div class="ws-qsearch-s-box">
@@ -9,6 +11,9 @@ document.body.innerHTML += `
       <div class="ws-qsearch-s-tips"></div>
     </div>
 `
+
+objCore.innerHTML = coreContent
+document.body.appendChild(objCore);
 
 const objMain = document.querySelector(".ws-qsearch-s-main");
 const objList = objMain.querySelector(".ws-qsearch-s-list");
@@ -121,6 +126,7 @@ function updateList(arr) {
     const li = document.createElement('li');
     li.setAttribute('qsearch-index', i)
     li.setAttribute('qsearch-tag', el.tag.name)
+    li.title = `标题:${el.title}\n地址:${el.url}`;
     li.innerHTML = `<div>${el.title}</div>`;
     switch (el.tag.id) {
       case 'bqy':
@@ -129,6 +135,12 @@ function updateList(arr) {
         }
         break;
       case 'sq':
+        li.onclick = () => {
+          window.open(el.url, '_blank');
+        }
+        break;
+      case 'lsjl':
+        li.title += `\n上次访问时间: ${new Date(el.time).toLocaleString()}`
         li.onclick = () => {
           window.open(el.url, '_blank');
         }
@@ -145,10 +157,22 @@ function activeTab(tab) {
   })
 }
 
+function getHistory(name) {
+  return chrome.runtime.sendMessage({
+    op: 'getHistory',
+    query: {
+      text: name,
+      startTime: new Date() - 1000 * 60 * 60 * 24 * 7,
+      maxResults: 100
+    }
+  })
+}
+
 function qSearch(name) {
   Promise.all([
     getBookmarks(name),
-    getTabs(name)
+    getTabs(name),
+    getHistory(name)
   ]).then(arr => {
     objList.innerHTML = '';
     res = arr.flat();
@@ -158,7 +182,8 @@ function qSearch(name) {
       objList.appendChild(li);
       return;
     }
-    fuseSearch(res, name).then(res => {
+    const uniqueItems = res.filter((item, index, self) => self.findIndex(t => t.title === item.title) === index);
+    fuseSearch(uniqueItems, name).then(res => {
       updateList(res)
     })
   })

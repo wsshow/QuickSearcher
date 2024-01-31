@@ -69,7 +69,7 @@ ul.ws-qsearch-s-list {
     padding: 3px !important;
     margin: 0;
     list-style: none;
-    display: none;
+    display: flex;
     flex-direction: column;
     width: 260px;
     max-height: 320px;
@@ -150,7 +150,7 @@ div.ws-qsearch-s-tips {
     font-style: italic;
     font-variant: small-caps;
     position: absolute;
-    left: 16px;
+    left: 6px;
     bottom: 3px;
     margin-top: 8px;
     color: aquamarine;

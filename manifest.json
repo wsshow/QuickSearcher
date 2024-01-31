@@ -12,7 +12,8 @@
     },
     "permissions": [
         "bookmarks",
-        "tabs"
+        "tabs",
+        "history"
     ],
     "action": {
         "default_popup": "popup.html",
@@ -31,9 +32,7 @@
     "content_scripts": [
         {
             "matches": [
-                "*://*.baidu.com/*",
-                "*://*.bing.com/*",
-                "*://*.google.com/*"
+                "<all_urls>"
             ],
             "js": [
                 "content.js"
